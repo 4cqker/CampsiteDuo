@@ -13,6 +13,9 @@ public class PlayerControl : MonoBehaviour
 
     public float moveSpeed = 12f;
     public float sprintSpeed = 16f;
+    public int normalFOV = 60;
+    public int sprintFOV = 75;
+    public float lerpFOVTime = 0.2f;
     public float camSpeedVertical = 10f;
     public float camSpeedHorizontal = 10f;
     public float jumpHeight = 3f;
@@ -46,14 +49,21 @@ public class PlayerControl : MonoBehaviour
 
         Vector3 moveVector = transform.right * xInput + transform.forward * zInput;
 
+        //if (Input.GetButtonDown("Sprint")) mainCamera.fieldOfView = Mathf.Lerp(normalFOV, sprintFOV, lerpFOVTime);
+
         if (Input.GetButton("Sprint"))
         {
             moveVector = moveVector.normalized * sprintSpeed * Time.deltaTime;
+            mainCamera.fieldOfView = sprintFOV;
         }
         else
         {
             moveVector = moveVector.normalized * moveSpeed * Time.deltaTime;
+            mainCamera.fieldOfView = normalFOV;
         }
+
+        // Need to turn this into a co-routine to make it happen properly, would have to make a method 
+        //if (Input.GetButtonUp("Sprint")) mainCamera.fieldOfView = Mathf.Lerp(sprintFOV, normalFOV, lerpFOVTime);
 
         controller.Move(moveVector);
 
@@ -71,5 +81,10 @@ public class PlayerControl : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundedPoint.position, 0.5f, groundMask);
         if (isGrounded && velocity.y < 0) velocity.y = -1f;
         
+    }
+
+    IEnumerator FOVChange (float time)
+    {
+        return null;
     }
 }
