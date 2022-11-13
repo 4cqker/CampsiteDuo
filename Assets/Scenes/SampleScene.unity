@@ -382,9 +382,11 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 256
-  moveSpeed: 12
+  moveSpeed: 7
+  sprintSpeed: 10
   camSpeedVertical: 10
   camSpeedHorizontal: 10
+  jumpHeight: 3
 --- !u!143 &1158191888
 CharacterController:
   m_ObjectHideFlags: 0

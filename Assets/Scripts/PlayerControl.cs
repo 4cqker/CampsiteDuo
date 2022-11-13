@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour
     public LayerMask groundMask;
 
     public float moveSpeed = 12f;
+    public float sprintSpeed = 16f;
     public float camSpeedVertical = 10f;
     public float camSpeedHorizontal = 10f;
     public float jumpHeight = 3f;
@@ -44,9 +45,17 @@ public class PlayerControl : MonoBehaviour
         zInput = Input.GetAxisRaw("Vertical");
 
         Vector3 moveVector = transform.right * xInput + transform.forward * zInput;
-        Vector3 moveVectorCleaned = moveVector.normalized * moveSpeed * Time.deltaTime;
 
-        controller.Move(moveVectorCleaned);
+        if (Input.GetButton("Sprint"))
+        {
+            moveVector = moveVector.normalized * sprintSpeed * Time.deltaTime;
+        }
+        else
+        {
+            moveVector = moveVector.normalized * moveSpeed * Time.deltaTime;
+        }
+
+        controller.Move(moveVector);
 
         //Jumping
         if (Input.GetButtonDown("Jump") && isGrounded)
