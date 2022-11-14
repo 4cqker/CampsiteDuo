@@ -27,6 +27,8 @@ public class PlayerControl : MonoBehaviour
     private float gravity = -9.81f;
     private bool isGrounded;
 
+    private Coroutine fovChanging;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -49,21 +51,28 @@ public class PlayerControl : MonoBehaviour
 
         Vector3 moveVector = transform.right * xInput + transform.forward * zInput;
 
-        //if (Input.GetButtonDown("Sprint")) mainCamera.fieldOfView = Mathf.Lerp(normalFOV, sprintFOV, lerpFOVTime);
+        //Start FOV change when starting to sprint
+        if (Input.GetButtonDown("Sprint")) 
+            fovChanging = StartCoroutine(FOVChange(sprintFOV, lerpFOVTime));
 
+        //maintain or break sprinting speed
         if (Input.GetButton("Sprint"))
         {
+
             moveVector = moveVector.normalized * sprintSpeed * Time.deltaTime;
-            mainCamera.fieldOfView = sprintFOV;
         }
         else
         {
+            FOVChange(normalFOV, lerpFOVTime);
             moveVector = moveVector.normalized * moveSpeed * Time.deltaTime;
-            mainCamera.fieldOfView = normalFOV;
         }
 
-        // Need to turn this into a co-routine to make it happen properly, would have to make a method 
-        //if (Input.GetButtonUp("Sprint")) mainCamera.fieldOfView = Mathf.Lerp(sprintFOV, normalFOV, lerpFOVTime);
+        //revert FOV change when stopped sprinting
+        if (Input.GetButtonUp("Sprint"))
+        {
+            StopCoroutine(fovChanging);
+            fovChanging = StartCoroutine(FOVChange(normalFOV, lerpFOVTime));
+        }
 
         controller.Move(moveVector);
 
@@ -83,8 +92,18 @@ public class PlayerControl : MonoBehaviour
         
     }
 
-    IEnumerator FOVChange (float time)
+
+    //Camera Field of View Lerping (for sprinting)
+    IEnumerator FOVChange (float targetFOV, float time)
     {
-        return null;
+        Debug.Log("SmothDamping the camera toward an FOV of " + targetFOV);
+        float currentVelocity = 0f;
+        while (mainCamera.fieldOfView != targetFOV) 
+        {
+            Camera.main.fieldOfView = Mathf.SmoothDamp(mainCamera.fieldOfView, targetFOV, ref currentVelocity, time);
+            yield return null;
+        }
+        Debug.Log("Finished damping. Final FOV: " + mainCamera.fieldOfView);
+        yield break;
     }
 }
