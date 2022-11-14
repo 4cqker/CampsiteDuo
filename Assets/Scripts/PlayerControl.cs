@@ -20,7 +20,7 @@ public class PlayerControl : MonoBehaviour
     public float camSpeedHorizontal = 10f;
     public float jumpHeight = 3f;
 
-    public Light spotlight;
+    private Light spotlight;
 
     private float xInput = 0f;
     private float zInput = 0f;

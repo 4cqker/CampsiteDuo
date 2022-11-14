@@ -475,10 +475,10 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 256
-  moveSpeed: 7
-  sprintSpeed: 10
-  normalFOV: 65
-  sprintFOV: 72
+  moveSpeed: 3
+  sprintSpeed: 4.5
+  normalFOV: 63
+  sprintFOV: 68
   lerpFOVTime: 0.16
   camSpeedVertical: 10
   camSpeedHorizontal: 10
