@@ -20,6 +20,8 @@ public class PlayerControl : MonoBehaviour
     public float camSpeedHorizontal = 10f;
     public float jumpHeight = 3f;
 
+    public Light spotlight;
+
     private float xInput = 0f;
     private float zInput = 0f;
     private float xRotation = 0f;
@@ -32,6 +34,7 @@ public class PlayerControl : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        spotlight = FindObjectOfType<Light>();
     }
 
     private void Update()
@@ -89,6 +92,8 @@ public class PlayerControl : MonoBehaviour
         //Ground Checking
         isGrounded = Physics.CheckSphere(groundedPoint.position, 0.5f, groundMask);
         if (isGrounded && velocity.y < 0) velocity.y = -1f;
+
+        if (Input.GetButtonDown("flashlight")) spotlight.gameObject.SetActive(!spotlight.gameObject.activeSelf);
         
     }
 
